@@ -45,6 +45,8 @@ impl Range {
         end_container: &Node,
         end_offset: u32,
     ) -> Range {
+        debug_assert!(start_offset <= start_container.len());
+        debug_assert!(end_offset <= end_container.len());
         Range {
             abstractrange: AbstractRange::new_inherited(
                 start_container,

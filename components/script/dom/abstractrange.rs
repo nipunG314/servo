@@ -100,7 +100,6 @@ pub struct BoundaryPoint {
 impl BoundaryPoint {
     fn new(node: &Node, offset: u32) -> BoundaryPoint {
         debug_assert!(!node.is_doctype());
-        debug_assert!(offset <= node.len());
         BoundaryPoint {
             node: MutDom::new(node),
             offset: Cell::new(offset),
