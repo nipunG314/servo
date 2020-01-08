@@ -14,7 +14,7 @@ use crate::dom::bindings::codegen::Bindings::WindowBinding::WindowMethods;
 use crate::dom::bindings::error::{Error, ErrorResult, Fallible};
 use crate::dom::bindings::inheritance::Castable;
 use crate::dom::bindings::inheritance::{CharacterDataTypeId, NodeTypeId};
-use crate::dom::bindings::reflector::{reflect_dom_object};
+use crate::dom::bindings::reflector::reflect_dom_object;
 use crate::dom::bindings::root::{Dom, DomRoot};
 use crate::dom::bindings::str::DOMString;
 use crate::dom::bindings::trace::JSTraceable;
@@ -30,7 +30,7 @@ use crate::dom::window::Window;
 use dom_struct::dom_struct;
 use js::jsapi::JSTracer;
 use malloc_size_of::{MallocSizeOf, MallocSizeOfOps};
-use std::cell::{UnsafeCell};
+use std::cell::UnsafeCell;
 use std::cmp::{Ordering, PartialOrd};
 
 #[dom_struct]
@@ -402,13 +402,9 @@ impl RangeMethods for Range {
             RangeConstants::START_TO_START => {
                 (self.abstractrange.start(), self.abstractrange.start())
             },
-            RangeConstants::START_TO_END => {
-                (self.abstractrange.end(), self.abstractrange.start())
-            },
+            RangeConstants::START_TO_END => (self.abstractrange.end(), self.abstractrange.start()),
             RangeConstants::END_TO_END => (self.abstractrange.end(), self.abstractrange.end()),
-            RangeConstants::END_TO_START => {
-                (self.abstractrange.start(), self.abstractrange.end())
-            },
+            RangeConstants::END_TO_START => (self.abstractrange.start(), self.abstractrange.end()),
             _ => unreachable!(),
         };
         // step 4.
