@@ -39,12 +39,13 @@ impl Tokenizer {
         Tokenizer { inner: tok }
     }
 
-    pub fn feed(&mut self, input: &mut BufferQueue) -> Result<(), DomRoot<HTMLScriptElement>> {
+    #[must_use]
+    pub fn feed(&mut self, input: &mut BufferQueue) -> Option<DomRoot<HTMLScriptElement>> {
         self.inner.run(input);
         if let Some(script) = self.inner.sink.sink.script.take() {
-            return Err(script);
+            return Some(script);
         }
-        Ok(())
+        None
     }
 
     pub fn end(&mut self) {

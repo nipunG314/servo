@@ -545,7 +545,7 @@ impl ServoParser {
 
     fn tokenize<F>(&self, mut feed: F)
     where
-        F: FnMut(&mut Tokenizer) -> Result<(), DomRoot<HTMLScriptElement>>,
+        F: FnMut(&mut Tokenizer) -> Option<DomRoot<HTMLScriptElement>>,
     {
         loop {
             assert!(!self.suspended.get());
@@ -553,8 +553,8 @@ impl ServoParser {
 
             self.document.reflow_if_reflow_timer_expired();
             let script = match feed(&mut *self.tokenizer.borrow_mut()) {
-                Ok(()) => return,
-                Err(script) => script,
+                None => return,
+                Some(script) => script,
             };
 
             let script_nesting_level = self.script_nesting_level.get();
@@ -634,7 +634,8 @@ enum Tokenizer {
 }
 
 impl Tokenizer {
-    fn feed(&mut self, input: &mut BufferQueue) -> Result<(), DomRoot<HTMLScriptElement>> {
+    #[must_use]
+    fn feed(&mut self, input: &mut BufferQueue) -> Option<DomRoot<HTMLScriptElement>> {
         match *self {
             Tokenizer::Html(ref mut tokenizer) => tokenizer.feed(input),
             Tokenizer::AsyncHtml(ref mut tokenizer) => tokenizer.feed(input),
